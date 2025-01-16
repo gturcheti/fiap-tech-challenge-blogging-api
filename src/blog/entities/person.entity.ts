@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { IPerson } from './models/person.interface';
 
-@Entity()
+@Entity({ name: 'person' })
 export class Person implements IPerson {
   @PrimaryGeneratedColumn('increment', { name: 'id' })
   id?: number;

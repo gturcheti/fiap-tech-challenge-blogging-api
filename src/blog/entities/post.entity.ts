@@ -11,7 +11,7 @@ import { IPost } from './models/post.interface';
 import { Person } from './person.entity';
 import { IPerson } from './models/person.interface';
 
-@Entity()
+@Entity({ name: 'post' })
 export class Post implements IPost {
   @PrimaryGeneratedColumn('increment', { name: 'id' })
   id?: string | undefined;
