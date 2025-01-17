@@ -1,7 +1,7 @@
-import { IUser } from './models/user.interface';
+import { IUser } from '../../blog/entities/models/user.interface';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'user' })
 export class User implements IUser {
   @PrimaryGeneratedColumn('increment', { name: 'id' })
   id?: number;

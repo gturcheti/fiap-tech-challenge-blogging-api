@@ -17,14 +17,18 @@ export class PersonService {
   }
 
   async createPerson(person: IPerson) {
-    return await this.personRepository.createEntity(person);
+    return await this.personRepository.createPerson(person);
   }
 
-  async updatePerson(person: IPerson) {
-    return await this.personRepository.updateEntity(person);
+  async updatePerson(personId: number, person: IPerson) {
+    const existingPerson = await this.personRepository.findById(personId);
+    if (!existingPerson) throw new NotFoundException(`Person not found`);
+    return await this.personRepository.updatePerson(existingPerson, person);
   }
 
-  async deletePerson(person: IPerson) {
-    return await this.personRepository.deleteEntity(person);
+  async deletePerson(personId) {
+    const person = await this.personRepository.findById(personId);
+    if (!person) throw new NotFoundException(`Person not found`);
+    return await this.personRepository.deletePerson(person);
   }
 }

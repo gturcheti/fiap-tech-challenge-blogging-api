@@ -34,13 +34,15 @@ export class PersonController {
   }
 
   @Put(':personId')
-  async updatePerson(@Body() person: IPerson) {
-    return await this.personService.updatePerson(person);
+  async updatePerson(
+    @Param('personId') personId: string,
+    @Body() person: IPerson,
+  ) {
+    return await this.personService.updatePerson(parseInt(personId), person);
   }
 
   @Delete(':personId')
   async deletePerson(@Param('personId') personId: number) {
-    const person = await this.personService.getPerson(personId);
-    return this.personService.deletePerson(person);
+    return this.personService.deletePerson(personId);
   }
 }

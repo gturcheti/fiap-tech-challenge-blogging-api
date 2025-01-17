@@ -1,9 +1,36 @@
-import { EntityRepository } from 'typeorm';
-import { User } from 'src/blog/entities/users.entity';
-import { BasePGRepository } from './base.pg.repository';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { IUser } from 'src/blog/entities/models/user.interface';
+import { User } from 'src/blog/entities/user.entity';
 import { UserRepository } from '../user.repository';
 
-@EntityRepository(User)
-export class UserPGRepository
-  extends BasePGRepository<User>
-  implements UserRepository {}
+export class UserPGRepository implements UserRepository {
+  constructor(
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
+  ) {}
+
+  async findById(id: number): Promise<IUser | undefined> {
+    return await this.userRepository.findOneBy({ id } as any);
+  }
+
+  async findAll(limit: number, page: number): Promise<IUser[]> {
+    return await this.userRepository.find({
+      take: limit,
+      skip: limit * (page - 1),
+    });
+  }
+
+  async createUser(user: IUser): Promise<IUser> {
+    return await this.userRepository.save(user);
+  }
+
+  async updateUser(existingUser: IUser, user: IUser): Promise<IUser> {
+    const updatedUser = this.userRepository.merge(existingUser, user);
+    return await this.userRepository.save(updatedUser);
+  }
+
+  async deleteUser(user: IUser): Promise<void> {
+    await this.userRepository.remove(user);
+  }
+}

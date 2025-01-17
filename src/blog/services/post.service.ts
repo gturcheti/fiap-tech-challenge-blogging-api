@@ -17,14 +17,18 @@ export class PostService {
   }
 
   async createPost(post: IPost) {
-    return await this.postRepository.createEntity(post);
+    return await this.postRepository.createPost(post);
   }
 
-  async updatePost(post: IPost) {
-    return await this.postRepository.updateEntity(post);
+  async updatePost(postId: number, post: IPost) {
+    const existingPost = await this.postRepository.findById(postId);
+    if (!existingPost) throw new NotFoundException(`Post not found`);
+    return await this.postRepository.updatePost(existingPost, post);
   }
 
-  async deletePost(post: IPost) {
-    return this.postRepository.deleteEntity(post);
+  async deletePost(postId: number) {
+    const post = await this.postRepository.findById(postId);
+    if (!post) throw new NotFoundException(`Post not found`);
+    return this.postRepository.deletePost(post);
   }
 }
