@@ -1,4 +1,4 @@
-import { IUser } from './models/user.interface';
+import { IUser } from '../../blog/entities/models/user.interface';
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'user' })

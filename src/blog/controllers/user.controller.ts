@@ -31,13 +31,12 @@ export class UserController {
   }
 
   @Put(':userId')
-  async updateUser(@Body() user: IUser) {
-    return await this.userService.updateUser(user);
+  async updateUser(@Param('userId') userId: string, @Body() user: IUser) {
+    return await this.userService.updateUser(parseInt(userId), user);
   }
 
   @Delete(':userId')
   async deleteUser(@Param('userId') userId: number) {
-    const user = await this.userService.getUser(userId);
-    return this.userService.deleteUser(user);
+    return this.userService.deleteUser(userId);
   }
 }

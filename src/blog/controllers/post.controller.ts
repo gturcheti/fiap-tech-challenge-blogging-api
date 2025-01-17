@@ -31,13 +31,12 @@ export class PostController {
   }
 
   @Put(':postId')
-  async updatePost(@Body() post: IPost) {
-    return await this.postService.updatePost(post);
+  async updatePost(@Param('postId') postId: string, @Body() post: IPost) {
+    return await this.postService.updatePost(parseInt(postId), post);
   }
 
   @Delete(':postId')
   async deletePost(@Param('postId') postId: number) {
-    const post = await this.postService.getPost(postId);
-    return this.postService.deletePost(post);
+    return this.postService.deletePost(postId);
   }
 }
