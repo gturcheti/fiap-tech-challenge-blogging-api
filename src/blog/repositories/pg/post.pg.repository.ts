@@ -11,13 +11,17 @@ export class PostPGRepository implements PostRepository {
   ) {}
 
   async findById(id: number): Promise<IPost | undefined> {
-    return await this.postRepository.findOneBy({ id } as any);
+    return await this.postRepository.findOne({
+      where: { id } as any,
+      relations: ['author'],
+    });
   }
 
   async findAll(limit: number, page: number): Promise<IPost[]> {
     return await this.postRepository.find({
       take: limit,
       skip: limit * (page - 1),
+      relations: ['author'],
     });
   }
 
@@ -25,9 +29,8 @@ export class PostPGRepository implements PostRepository {
     return await this.postRepository.save(post);
   }
 
-  async updatePost(existingPost: IPost, post: IPost): Promise<IPost> {
-    const updatedPost = this.postRepository.merge(existingPost, post);
-    return await this.postRepository.save(updatedPost);
+  async updatePost(post: IPost): Promise<IPost> {
+    return await this.postRepository.save(post);
   }
 
   async deletePost(post: IPost): Promise<void> {

@@ -20,10 +20,8 @@ export class UserService {
     return await this.userRepository.createUser(user);
   }
 
-  async updateUser(userId: number, user: IUser) {
-    const existingUser = await this.userRepository.findById(userId);
-    if (!existingUser) throw new NotFoundException(`User not found`);
-    return await this.userRepository.updateUser(existingUser, user);
+  async updateUser(user: IUser) {
+    return await this.userRepository.updateUser(user);
   }
 
   async deleteUser(userId: number) {

@@ -20,10 +20,8 @@ export class PersonService {
     return await this.personRepository.createPerson(person);
   }
 
-  async updatePerson(personId: number, person: IPerson) {
-    const existingPerson = await this.personRepository.findById(personId);
-    if (!existingPerson) throw new NotFoundException(`Person not found`);
-    return await this.personRepository.updatePerson(existingPerson, person);
+  async updatePerson(person: IPerson) {
+    return await this.personRepository.updatePerson(person);
   }
 
   async deletePerson(personId) {

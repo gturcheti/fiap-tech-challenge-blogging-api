@@ -11,13 +11,17 @@ export class UserPGRepository implements UserRepository {
   ) {}
 
   async findById(id: number): Promise<IUser | undefined> {
-    return await this.userRepository.findOneBy({ id } as any);
+    return await this.userRepository.findOne({
+      where: { id } as any,
+      relations: ['person'],
+    });
   }
 
   async findAll(limit: number, page: number): Promise<IUser[]> {
     return await this.userRepository.find({
       take: limit,
       skip: limit * (page - 1),
+      relations: ['person'],
     });
   }
 
@@ -25,9 +29,8 @@ export class UserPGRepository implements UserRepository {
     return await this.userRepository.save(user);
   }
 
-  async updateUser(existingUser: IUser, user: IUser): Promise<IUser> {
-    const updatedUser = this.userRepository.merge(existingUser, user);
-    return await this.userRepository.save(updatedUser);
+  async updateUser(user: IUser): Promise<IUser> {
+    return await this.userRepository.save(user);
   }
 
   async deleteUser(user: IUser): Promise<void> {
