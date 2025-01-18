@@ -4,39 +4,63 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Put,
   Query,
+  UsePipes,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
-import { IUser } from '../entities/models/user.interface';
+import { z } from 'zod';
+import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
+
+const userSchema = z.object({
+  id: z.coerce.number().optional(),
+  username: z.string(),
+  password: z.string(),
+  person: z.coerce.number().optional(),
+});
+
+type UserSchema = z.infer<typeof userSchema>;
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get(':userId')
-  async getUser(@Param('userId') userId: number) {
+  async getUser(@Param('userId', ParseIntPipe) userId: number) {
     return await this.userService.getUser(userId);
   }
 
   @Get()
-  async getAllUser(@Query('limit') limit: number, @Query('page') page: number) {
+  async getAllUser(
+    @Query('limit', ParseIntPipe) limit: number,
+    @Query('page', ParseIntPipe) page: number,
+  ) {
     return await this.userService.getAllUser(limit, page);
   }
 
+  @UsePipes(new ZodValidationPipe(userSchema))
   @Post()
-  async createUser(@Body() user: IUser) {
-    return await this.userService.createUser(user);
+  async createUser(@Body() { username, password, person }: UserSchema) {
+    return await this.userService.createUser({ username, password, person });
   }
 
-  @Put(':userId')
-  async updateUser(@Param('userId') userId: string, @Body() user: IUser) {
-    return await this.userService.updateUser(parseInt(userId), user);
+  @Put()
+  async updateUser(
+    @Body(new ZodValidationPipe(userSchema))
+    { id, username, password, person }: UserSchema,
+  ) {
+    return await this.userService.updateUser({
+      id,
+      username,
+      password,
+      person,
+    });
   }
 
   @Delete(':userId')
-  async deleteUser(@Param('userId') userId: number) {
+  async deleteUser(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.deleteUser(userId);
   }
 }

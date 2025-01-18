@@ -1,5 +1,12 @@
 import { IUser } from '../../blog/entities/models/user.interface';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { Person } from './person.entity';
 
 @Entity({ name: 'user' })
 export class User implements IUser {
@@ -11,4 +18,8 @@ export class User implements IUser {
 
   @Column({ name: 'password', type: 'varchar', length: 255 })
   password: string;
+
+  @OneToOne(() => Person)
+  @JoinColumn({ name: 'person_id' })
+  person?: number;
 }

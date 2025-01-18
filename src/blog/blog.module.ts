@@ -11,6 +11,10 @@ import { Person } from './entities/person.entity';
 import { PersonRepository } from './repositories/person.repository';
 import { PostPGRepository } from './repositories/pg/post.pg.repository';
 import { PersonPGRepository } from './repositories/pg/person.pg.repository';
+import { PersonController } from './controllers/person.controller';
+import { PostController } from './controllers/post.controller';
+import { PostService } from './services/post.service';
+import { PersonService } from './services/person.service';
 
 @Module({
   imports: [
@@ -23,7 +27,7 @@ import { PersonPGRepository } from './repositories/pg/person.pg.repository';
       PersonRepository,
     ]),
   ],
-  controllers: [UserController],
+  controllers: [PersonController, PostController, UserController],
   providers: [
     {
       provide: UserRepository,
@@ -38,6 +42,8 @@ import { PersonPGRepository } from './repositories/pg/person.pg.repository';
       useClass: PersonPGRepository,
     },
     UserService,
+    PersonService,
+    PostService,
   ],
 })
 export class BlogModule {}

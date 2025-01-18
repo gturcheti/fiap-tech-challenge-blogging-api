@@ -9,16 +9,15 @@ import {
 } from 'typeorm';
 import { IPost } from './models/post.interface';
 import { Person } from './person.entity';
-import { IPerson } from './models/person.interface';
 
 @Entity({ name: 'post' })
 export class Post implements IPost {
   @PrimaryGeneratedColumn('increment', { name: 'id' })
-  id?: string | undefined;
+  id?: number;
 
   @ManyToOne(() => Person)
-  @JoinColumn({ name: 'author' })
-  author: IPerson;
+  @JoinColumn({ name: 'author_id' })
+  author: number;
 
   @Column({
     name: 'title',
@@ -35,7 +34,7 @@ export class Post implements IPost {
     type: 'timestamp without time zone',
     default: () => 'CURRENT_TIMESTAMP',
   })
-  createdAt: string;
+  createdAt?: string;
 
   @UpdateDateColumn({
     name: 'updated_at',
@@ -43,5 +42,5 @@ export class Post implements IPost {
     default: () => 'CURRENT_TIMESTAMP',
     onUpdate: 'CURRENT_TIMESTAMP',
   })
-  updatedAt: string;
+  updatedAt?: string;
 }

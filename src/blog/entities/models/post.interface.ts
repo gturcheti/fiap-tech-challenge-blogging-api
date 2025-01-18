@@ -1,10 +1,8 @@
-import { IPerson } from './person.interface';
-
 export interface IPost {
-  id?: string | undefined;
-  author: IPerson;
+  id?: number;
+  author: number;
   title: string;
   content: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
