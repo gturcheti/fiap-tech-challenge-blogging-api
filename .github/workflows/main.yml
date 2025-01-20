@@ -1,0 +1,25 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+  
+  env: 
+    DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+
+  steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v4
+
+    - name: Build and Push Docker Image
+      run: |
+        docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        docker build -t $DOCKER_USERNAME/fiap-tech-challenge-blogging-api:latest --build-arg NODE_ENV=${{secrets.NODE_ENV}} --build-arg PORT=${{secrets.PORT}} --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} --build-arg DATABASE=${{ secrets.DATABASE }} --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} .
+        docker push $DOCKER_USERNAME/fiap-tech-challenge-blogging-api:latest
+   
