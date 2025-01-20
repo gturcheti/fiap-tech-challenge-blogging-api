@@ -1,5 +1,24 @@
 
 services:
+  api: 
+    container_name: blogging_api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app
+    depends_on:
+      - postgres
+    environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: ${PORT}
+      DATABASE: ${DATABASE}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_URL: postgres://postgres:${DATABASE_PASSWORD}@postgres:${DATABASE_PORT}/postgres
   postgres:
     container_name: blogging_db
     image: postgres:latest
