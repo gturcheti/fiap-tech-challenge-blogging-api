@@ -13,6 +13,7 @@ import {
 import { UserService } from '../services/user.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 const userSchema = z.object({
   id: z.coerce.number().optional(),
@@ -23,6 +24,7 @@ const userSchema = z.object({
 
 type UserSchema = z.infer<typeof userSchema>;
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -40,6 +42,7 @@ export class UserController {
     return await this.userService.getAllUser(limit, page);
   }
 
+  @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(userSchema))
   @Post()
   async createUser(@Body() { username, password, person }: UserSchema) {
