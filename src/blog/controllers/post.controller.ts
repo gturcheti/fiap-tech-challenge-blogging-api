@@ -14,6 +14,7 @@ import { PostService } from '../services/post.service';
 import { IPost } from '../entities/models/post.interface';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 const postSchema = z.object({
   id: z.coerce.number().optional(),
@@ -24,6 +25,7 @@ const postSchema = z.object({
 
 type PostSchema = z.infer<typeof postSchema>;
 
+@ApiTags('Post')
 @Controller('post')
 export class PostController {
   constructor(private readonly postService: PostService) {}
@@ -41,6 +43,7 @@ export class PostController {
     return await this.postService.getAllPost(limit, page);
   }
 
+  @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(postSchema))
   @Post()
   async createPost(@Body() { author, title, content }: PostSchema) {

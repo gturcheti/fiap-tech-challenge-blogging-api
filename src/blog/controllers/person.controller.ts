@@ -13,6 +13,7 @@ import {
 import { PersonService } from '../services/person.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 const personSchema = z.object({
   id: z.coerce.number().optional(),
@@ -22,8 +23,10 @@ const personSchema = z.object({
   professor: z.boolean(),
 });
 
+
 type PersonSchema = z.infer<typeof personSchema>;
 
+@ApiTags('Person')
 @Controller('person')
 export class PersonController {
   constructor(private readonly personService: PersonService) {}
@@ -41,6 +44,7 @@ export class PersonController {
     return await this.personService.getAllPerson(limit, page);
   }
 
+  @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(personSchema))
   @Post()
   async createPerson(
