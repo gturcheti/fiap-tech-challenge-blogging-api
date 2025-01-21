@@ -8,18 +8,22 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { personSchema } from './person.controller';
+import { IUser } from '../entities/models/user.interface';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 const userSchema = z.object({
   id: z.coerce.number().optional(),
   username: z.string(),
   password: z.string(),
-  person: z.coerce.number().optional(),
+  person: personSchema.optional(),
 });
 
 type UserSchema = z.infer<typeof userSchema>;
@@ -29,11 +33,13 @@ type UserSchema = z.infer<typeof userSchema>;
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(AuthGuard)
   @Get(':userId')
   async getUser(@Param('userId', ParseIntPipe) userId: number) {
     return await this.userService.getUser(userId);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   async getAllUser(
     @Query('limit', ParseIntPipe) limit: number,
@@ -46,9 +52,14 @@ export class UserController {
   @UsePipes(new ZodValidationPipe(userSchema))
   @Post()
   async createUser(@Body() { username, password, person }: UserSchema) {
-    return await this.userService.createUser({ username, password, person });
+    return await this.userService.createUser({
+      username,
+      password,
+      person,
+    } as IUser);
   }
 
+  @UseGuards(AuthGuard)
   @Put()
   async updateUser(
     @Body(new ZodValidationPipe(userSchema))
@@ -59,9 +70,10 @@ export class UserController {
       username,
       password,
       person,
-    });
+    } as IUser);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':userId')
   async deleteUser(@Param('userId', ParseIntPipe) userId: number) {
     return this.userService.deleteUser(userId);

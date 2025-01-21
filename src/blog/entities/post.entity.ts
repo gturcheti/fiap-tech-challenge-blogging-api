@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 import { IPost } from './models/post.interface';
 import { Person } from './person.entity';
+import { IPerson } from './models/person.interface';
 
 @Entity({ name: 'post' })
 export class Post implements IPost {
@@ -17,7 +18,7 @@ export class Post implements IPost {
 
   @ManyToOne(() => Person)
   @JoinColumn({ name: 'author_id' })
-  author: number;
+  author: IPerson;
 
   @Column({
     name: 'title',
