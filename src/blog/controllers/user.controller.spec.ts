@@ -3,7 +3,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import { AppModule } from '../src/app.module';
+import { AppModule } from 'src/app.module';
+import { UserController } from './user.controller';
+import { UserService } from '../services/user.service';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -134,4 +136,18 @@ describe('UserController (e2e)', () => {
       expect(response.body.message).toBe('Usuário não encontrado');
     });
   });
+  describe('UserController', () => {
+    let userController: UserController;
+    let userService: UserService;
+  
+    beforeEach(() => {
+      userService = { /* mock methods here */ } as any;
+      userController = new UserController(userService);
+    });
+  
+    it('should be defined', () => {
+      expect(userController).toBeDefined();
+    });
+  });
+  
 });
