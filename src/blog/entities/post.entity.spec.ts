@@ -13,11 +13,18 @@ describe('Post Entity', () => {
   });
 
   it('should have the correct properties', () => {
-    post.author = 1;  // Simulando o ID do autor, que é um número.
+    post.author = {
+      id: 1,
+      name: 'Test Name',
+      surname: 'Test Surname',
+      email: 'test@test.com',
+      professor: false,
+    };
+    // Simulando o ID do autor, que é um número.
     post.title = 'Test Post';
     post.content = 'This is a test post content.';
-    
-    expect(post.author).toBe(1);
+
+    expect(post.author.id).toBe(1);
     expect(post.title).toBe('Test Post');
     expect(post.content).toBe('This is a test post content.');
   });
@@ -39,9 +46,9 @@ describe('Post Entity', () => {
   it('should relate to the Person entity through author field', () => {
     const person = new Person();
     person.id = 1;
-    post.author = person.id;
+    post.author.id = person.id;
 
-    expect(post.author).toBe(person.id);
+    expect(post.author.id).toBe(person.id);
   });
 
   it('should define the correct database column names', () => {

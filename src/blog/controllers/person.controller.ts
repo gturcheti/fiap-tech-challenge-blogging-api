@@ -26,7 +26,6 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-
 export const personSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string(),
@@ -40,7 +39,7 @@ type PersonSchema = z.infer<typeof personSchema>;
 @ApiTags('Person')
 @Controller('Person')
 export class PersonController {
-  constructor(private readonly personService: PersonService) { }
+  constructor(private readonly personService: PersonService) {}
 
   @UseGuards(AuthGuard)
   @Get(':personId')
@@ -158,15 +157,33 @@ export class PersonController {
     schema: {
       type: 'object',
       properties: {
-        name: { type: 'string', description: 'Nome da pessoa', example: 'João' },
-        surname: { type: 'string', description: 'Sobrenome da pessoa', example: 'Silva' },
-        email: { type: 'string', description: 'E-mail válido da pessoa', example: 'joao.silva@email.com' },
-        professor: { type: 'boolean', description: 'Indica se a pessoa é um professor', example: true },
+        name: {
+          type: 'string',
+          description: 'Nome da pessoa',
+          example: 'João',
+        },
+        surname: {
+          type: 'string',
+          description: 'Sobrenome da pessoa',
+          example: 'Silva',
+        },
+        email: {
+          type: 'string',
+          description: 'E-mail válido da pessoa',
+          example: 'joao.silva@email.com',
+        },
+        professor: {
+          type: 'boolean',
+          description: 'Indica se a pessoa é um professor',
+          example: true,
+        },
       },
       required: ['name', 'surname', 'email', 'professor'],
     },
   })
-  async createPerson(@Body() { name, surname, email, professor }: PersonSchema) {
+  async createPerson(
+    @Body() { name, surname, email, professor }: PersonSchema,
+  ) {
     return this.personService.createPerson({ name, surname, email, professor });
   }
 
@@ -177,21 +194,50 @@ export class PersonController {
   @ApiResponse({ status: 400, description: 'Dados de entrada inválidos.' })
   @ApiResponse({ status: 404, description: 'Pessoa não encontrada.' })
   @ApiBody({
-    description: 'Dados necessários para atualizar uma pessoa existente. Todos os campos devem ser fornecidos, incluindo o ID.',
+    description:
+      'Dados necessários para atualizar uma pessoa existente. Todos os campos devem ser fornecidos, incluindo o ID.',
     schema: {
       type: 'object',
       properties: {
-        id: { type: 'number', description: 'ID único da pessoa a ser atualizada', example: 1 },
-        name: { type: 'string', description: 'Nome da pessoa', example: 'Lucas' },
-        surname: { type: 'string', description: 'Sobrenome da pessoa', example: 'Silva' },
-        email: { type: 'string', description: 'E-mail válido da pessoa', example: 'lucas.silva@email.com' },
-        professor: { type: 'boolean', description: 'Indica se a pessoa é professor', example: true },
+        id: {
+          type: 'number',
+          description: 'ID único da pessoa a ser atualizada',
+          example: 1,
+        },
+        name: {
+          type: 'string',
+          description: 'Nome da pessoa',
+          example: 'Lucas',
+        },
+        surname: {
+          type: 'string',
+          description: 'Sobrenome da pessoa',
+          example: 'Silva',
+        },
+        email: {
+          type: 'string',
+          description: 'E-mail válido da pessoa',
+          example: 'lucas.silva@email.com',
+        },
+        professor: {
+          type: 'boolean',
+          description: 'Indica se a pessoa é professor',
+          example: true,
+        },
       },
       required: ['id', 'name', 'surname', 'email', 'professor'],
     },
   })
-  async updatePerson(@Body() { id, name, surname, email, professor }: PersonSchema) {
-    return this.personService.updatePerson({ id, name, surname, email, professor });
+  async updatePerson(
+    @Body() { id, name, surname, email, professor }: PersonSchema,
+  ) {
+    return this.personService.updatePerson({
+      id,
+      name,
+      surname,
+      email,
+      professor,
+    });
   }
 
   @UseGuards(AuthGuard)
