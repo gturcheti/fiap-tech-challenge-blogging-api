@@ -15,11 +15,17 @@ describe('User Entity', () => {
   it('should have the correct properties', () => {
     user.username = 'testUser';
     user.password = 'testPassword';
-    user.person = 1;  // Simulando o ID da pessoa associada.
+    user.person = {
+      id: 1,
+      name: 'testName',
+      surname: 'testSurname',
+      email: 'test@test.com',
+      professor: false,
+    }; // Simulando o ID da pessoa associada.
 
     expect(user.username).toBe('testUser');
     expect(user.password).toBe('testPassword');
-    expect(user.person).toBe(1);
+    expect(user.person.id).toBe(1);
   });
 
   it('should have an optional id property', () => {
@@ -29,9 +35,9 @@ describe('User Entity', () => {
   it('should relate to the Person entity through person field', () => {
     const person = new Person();
     person.id = 1;
-    user.person = person.id;
+    user.person.id = person.id;
 
-    expect(user.person).toBe(person.id);
+    expect(user.person.id).toBe(person.id);
   });
 
   it('should define the correct database column names', () => {
@@ -45,9 +51,9 @@ describe('User Entity', () => {
   it('should have the correct relationship with the Person entity (OneToOne)', () => {
     const person = new Person();
     person.id = 1;
-    user.person = person.id;
+    user.person.id = person.id;
 
     // Verifica se o relacionamento OneToOne foi configurado corretamente
-    expect(user.person).toBe(person.id);
+    expect(user.person.id).toBe(person.id);
   });
 });

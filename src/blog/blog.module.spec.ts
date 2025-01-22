@@ -18,7 +18,7 @@ describe('BlogModule', () => {
 
   beforeEach(async () => {
     app = await Test.createTestingModule({
-      imports: [BlogModule],  // Importa o BlogModule
+      imports: [BlogModule], // Importa o BlogModule
     }).compile();
   });
 
@@ -89,22 +89,22 @@ describe('BlogModule', () => {
     });
 
     it('should instantiate PersonPGRepository', () => {
-      const personPGRepository = app.get<PersonPGRepository>(PersonPGRepository);
+      const personPGRepository =
+        app.get<PersonPGRepository>(PersonPGRepository);
       expect(personPGRepository).toBeDefined();
     });
   });
-describe('BlogModule', () => {
-  let app: TestingModule;
+  describe('BlogModule', () => {
+    let app: TestingModule;
 
-  beforeAll(async () => {
-    app = await Test.createTestingModule({
-      imports: [BlogModule],
-    }).compile();
+    beforeAll(async () => {
+      app = await Test.createTestingModule({
+        imports: [BlogModule],
+      }).compile();
+    });
+
+    it('should be defined', () => {
+      expect(app).toBeDefined();
+    });
   });
-
-  it('should be defined', () => {
-    expect(app).toBeDefined();
-  });
-});
-
 });

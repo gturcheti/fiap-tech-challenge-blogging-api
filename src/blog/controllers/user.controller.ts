@@ -14,7 +14,14 @@ import {
 import { UserService } from '../services/user.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
-import { ApiBearerAuth, ApiTags, ApiOperation, ApiParam, ApiResponse, ApiProperty } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiTags,
+  ApiOperation,
+  ApiParam,
+  ApiResponse,
+  ApiProperty,
+} from '@nestjs/swagger';
 import { personSchema } from './person.controller';
 import { IUser } from '../entities/models/user.interface';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
@@ -59,7 +66,7 @@ class UserResponseDto {
 @ApiTags('User')
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard)
   @Get(':userId')
@@ -137,7 +144,8 @@ export class UserController {
   })
   @ApiResponse({
     status: 500,
-    description: 'Erro interno do servidor ao tentar recuperar a lista de usuários.',
+    description:
+      'Erro interno do servidor ao tentar recuperar a lista de usuários.',
   })
   async getAllUser(
     @Query('limit', ParseIntPipe) limit: number,
@@ -145,7 +153,6 @@ export class UserController {
   ) {
     return await this.userService.getAllUser(limit, page);
   }
-
 
   @ApiBearerAuth()
   @Post()
@@ -178,7 +185,8 @@ export class UserController {
   @Put()
   @ApiOperation({
     summary: 'Atualizar usuário existente',
-    description: 'Atualiza as informações de um usuário existente com os dados fornecidos.',
+    description:
+      'Atualiza as informações de um usuário existente com os dados fornecidos.',
   })
   @ApiResponse({
     status: 200,
@@ -194,9 +202,7 @@ export class UserController {
     description: 'Usuário não encontrado com o ID fornecido.',
   })
   @UsePipes(new ZodValidationPipe(userSchema))
-  async updateUser(
-    @Body() { id, username, password, person }: UserSchema,
-  ) {
+  async updateUser(@Body() { id, username, password, person }: UserSchema) {
     const saltRounds = 8;
     const hashedPassword = await hash(password, saltRounds);
 

@@ -26,7 +26,9 @@ describe('UserController (e2e)', () => {
   describe('/user/:userId (GET)', () => {
     it('Deve retornar os dados de um usuário pelo ID', async () => {
       const userId = 1; // Supondo que o ID 1 exista
-      const response = await request(app.getHttpServer()).get(`/user/${userId}`);
+      const response = await request(app.getHttpServer()).get(
+        `/user/${userId}`,
+      );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('id', userId);
@@ -44,7 +46,9 @@ describe('UserController (e2e)', () => {
 
   describe('/user (GET)', () => {
     it('Deve retornar uma lista paginada de usuários', async () => {
-      const response = await request(app.getHttpServer()).get('/user?limit=10&page=1');
+      const response = await request(app.getHttpServer()).get(
+        '/user?limit=10&page=1',
+      );
 
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
@@ -56,7 +60,9 @@ describe('UserController (e2e)', () => {
     });
 
     it('Deve retornar status 400 para parâmetros inválidos', async () => {
-      const response = await request(app.getHttpServer()).get('/user?limit=invalid&page=1');
+      const response = await request(app.getHttpServer()).get(
+        '/user?limit=invalid&page=1',
+      );
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Validation failed');
@@ -71,7 +77,9 @@ describe('UserController (e2e)', () => {
         person: 1,
       };
 
-      const response = await request(app.getHttpServer()).post('/user').send(newUser);
+      const response = await request(app.getHttpServer())
+        .post('/user')
+        .send(newUser);
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('id');
@@ -85,7 +93,9 @@ describe('UserController (e2e)', () => {
         password: 'senha123',
       };
 
-      const response = await request(app.getHttpServer()).post('/user').send(invalidUser);
+      const response = await request(app.getHttpServer())
+        .post('/user')
+        .send(invalidUser);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Validation failed');
@@ -101,7 +111,9 @@ describe('UserController (e2e)', () => {
         person: 1,
       };
 
-      const response = await request(app.getHttpServer()).put('/user').send(updatedUser);
+      const response = await request(app.getHttpServer())
+        .put('/user')
+        .send(updatedUser);
 
       expect(response.status).toBe(200);
       expect(response.body.username).toBe(updatedUser.username);
@@ -114,7 +126,9 @@ describe('UserController (e2e)', () => {
         username: '',
       };
 
-      const response = await request(app.getHttpServer()).put('/user').send(invalidUpdate);
+      const response = await request(app.getHttpServer())
+        .put('/user')
+        .send(invalidUpdate);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Validation failed');
@@ -124,7 +138,9 @@ describe('UserController (e2e)', () => {
   describe('/user/:userId (DELETE)', () => {
     it('Deve excluir um usuário pelo ID e retornar status 204', async () => {
       const userId = 1; // Supondo que o ID 1 exista
-      const response = await request(app.getHttpServer()).delete(`/user/${userId}`);
+      const response = await request(app.getHttpServer()).delete(
+        `/user/${userId}`,
+      );
 
       expect(response.status).toBe(204);
     });
@@ -139,15 +155,16 @@ describe('UserController (e2e)', () => {
   describe('UserController', () => {
     let userController: UserController;
     let userService: UserService;
-  
+
     beforeEach(() => {
-      userService = { /* mock methods here */ } as any;
+      userService = {
+        /* mock methods here */
+      } as any;
       userController = new UserController(userService);
     });
-  
+
     it('should be defined', () => {
       expect(userController).toBeDefined();
     });
   });
-  
 });

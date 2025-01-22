@@ -40,13 +40,14 @@ type PostSchema = z.infer<typeof postSchema>;
 @ApiTags('Post')
 @Controller('post')
 export class PostController {
-  constructor(private readonly postService: PostService) { }
+  constructor(private readonly postService: PostService) {}
 
   @UseGuards(AuthGuard)
   @Get(':postId')
   @ApiOperation({
     summary: 'Buscar um post pelo seu ID',
-    description: 'Esse endpoint retorna um post específico através do ID fornecido.',
+    description:
+      'Esse endpoint retorna um post específico através do ID fornecido.',
   })
   @ApiParam({
     name: 'postId',
@@ -116,7 +117,10 @@ export class PostController {
       },
     },
   })
-  @ApiResponse({ status: 400, description: 'Parâmetros de consulta inválidos.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Parâmetros de consulta inválidos.',
+  })
   async getAllPost(
     @Query('limit', ParseIntPipe) limit: number,
     @Query('page', ParseIntPipe) page: number,
@@ -149,8 +153,16 @@ export class PostController {
       type: 'object',
       properties: {
         author: { type: 'number', description: 'ID do autor', example: 1 },
-        title: { type: 'string', description: 'Título do post', example: 'Título do Post' },
-        content: { type: 'string', description: 'Conteúdo do post', example: 'Conteúdo do post aqui.' },
+        title: {
+          type: 'string',
+          description: 'Título do post',
+          example: 'Título do Post',
+        },
+        content: {
+          type: 'string',
+          description: 'Conteúdo do post',
+          example: 'Conteúdo do post aqui.',
+        },
       },
       required: ['author', 'title', 'content'],
     },
@@ -167,26 +179,41 @@ export class PostController {
   @Put()
   @ApiOperation({
     summary: 'Atualizar um post existente',
-    description: 'Esse endpoint permite atualizar um post existente, fornecendo o ID e os novos dados.',
+    description:
+      'Esse endpoint permite atualizar um post existente, fornecendo o ID e os novos dados.',
   })
   @ApiResponse({ status: 200, description: 'Post atualizado com sucesso.' })
   @ApiResponse({ status: 400, description: 'Dados inválidos fornecidos.' })
   @ApiResponse({ status: 404, description: 'Post não encontrado.' })
   @ApiBody({
-    description: 'Dados necessários para atualizar um post existente. Inclua o ID do post.',
+    description:
+      'Dados necessários para atualizar um post existente. Inclua o ID do post.',
     schema: {
       type: 'object',
       properties: {
-        id: { type: 'number', description: 'ID do post a ser atualizado', example: 1 },
+        id: {
+          type: 'number',
+          description: 'ID do post a ser atualizado',
+          example: 1,
+        },
         author: { type: 'number', description: 'ID do autor', example: 1 },
-        title: { type: 'string', description: 'Título do post', example: 'Título Atualizado' },
-        content: { type: 'string', description: 'Conteúdo do post', example: 'Conteúdo atualizado.' },
+        title: {
+          type: 'string',
+          description: 'Título do post',
+          example: 'Título Atualizado',
+        },
+        content: {
+          type: 'string',
+          description: 'Conteúdo do post',
+          example: 'Conteúdo atualizado.',
+        },
       },
       required: ['id', 'author', 'title', 'content'],
     },
   })
   async updatePost(
-    @Body(new ZodValidationPipe(postSchema)) { id, author, title, content }: PostSchema,
+    @Body(new ZodValidationPipe(postSchema))
+    { id, author, title, content }: PostSchema,
   ) {
     return await this.postService.updatePost({
       id,
@@ -214,7 +241,8 @@ export class PostController {
   })
   @ApiResponse({
     status: 404,
-    description: 'Post não encontrado. O ID fornecido não corresponde a nenhum post existente.',
+    description:
+      'Post não encontrado. O ID fornecido não corresponde a nenhum post existente.',
   })
   @ApiResponse({
     status: 400,
@@ -222,10 +250,10 @@ export class PostController {
   })
   @ApiResponse({
     status: 500,
-    description: 'Erro interno do servidor. Ocorreu um problema ao tentar excluir o post.',
+    description:
+      'Erro interno do servidor. Ocorreu um problema ao tentar excluir o post.',
   })
   async deletePost(@Param('postId', ParseIntPipe) postId: number) {
     return this.postService.deletePost(postId);
   }
-
 }

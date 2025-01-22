@@ -1,8 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PersonController } from './person.controller';
 import { PersonService } from '../services/person.service';
-import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
-import { ParseIntPipe } from '@nestjs/common';
 
 describe('PersonController', () => {
   let personController: PersonController;
@@ -32,7 +30,13 @@ describe('PersonController', () => {
   describe('getPerson', () => {
     it('should return a person by id', async () => {
       const personId = 1;
-      const result = { id: personId, name: 'John', surname: 'Doe', email: 'john.doe@example.com', professor: false };
+      const result = {
+        id: personId,
+        name: 'John',
+        surname: 'Doe',
+        email: 'john.doe@example.com',
+        professor: false,
+      };
       jest.spyOn(personService, 'getPerson').mockResolvedValue(result);
 
       expect(await personController.getPerson(personId)).toBe(result);
@@ -42,8 +46,20 @@ describe('PersonController', () => {
   describe('getAllPerson', () => {
     it('should return a list of people', async () => {
       const result = [
-        { id: 1, name: 'John', surname: 'Doe', email: 'john.doe@example.com', professor: false },
-        { id: 2, name: 'Jane', surname: 'Smith', email: 'jane.smith@example.com', professor: true },
+        {
+          id: 1,
+          name: 'John',
+          surname: 'Doe',
+          email: 'john.doe@example.com',
+          professor: false,
+        },
+        {
+          id: 2,
+          name: 'Jane',
+          surname: 'Smith',
+          email: 'jane.smith@example.com',
+          professor: true,
+        },
       ];
       jest.spyOn(personService, 'getAllPerson').mockResolvedValue(result);
 
@@ -53,7 +69,12 @@ describe('PersonController', () => {
 
   describe('createPerson', () => {
     it('should create a new person', async () => {
-      const newPerson = { name: 'John', surname: 'Doe', email: 'john.doe@example.com', professor: false };
+      const newPerson = {
+        name: 'John',
+        surname: 'Doe',
+        email: 'john.doe@example.com',
+        professor: false,
+      };
       const result = { id: 1, ...newPerson };
       jest.spyOn(personService, 'createPerson').mockResolvedValue(result);
 
@@ -63,10 +84,20 @@ describe('PersonController', () => {
 
   describe('updatePerson', () => {
     it('should update an existing person', async () => {
-      const updatedPerson = { id: 1, name: 'John', surname: 'Doe', email: 'john.doe@example.com', professor: false };
-      jest.spyOn(personService, 'updatePerson').mockResolvedValue(updatedPerson);
+      const updatedPerson = {
+        id: 1,
+        name: 'John',
+        surname: 'Doe',
+        email: 'john.doe@example.com',
+        professor: false,
+      };
+      jest
+        .spyOn(personService, 'updatePerson')
+        .mockResolvedValue(updatedPerson);
 
-      expect(await personController.updatePerson(updatedPerson)).toBe(updatedPerson);
+      expect(await personController.updatePerson(updatedPerson)).toBe(
+        updatedPerson,
+      );
     });
   });
 
@@ -74,8 +105,10 @@ describe('PersonController', () => {
     it('should delete a person by id', async () => {
       const personId = 1;
       jest.spyOn(personService, 'deletePerson').mockResolvedValue(undefined); // Retorna `undefined` para simular void
-  
-      await expect(personController.deletePerson(personId)).resolves.toBeUndefined(); // Verifica que o retorno é `undefined`
+
+      await expect(
+        personController.deletePerson(personId),
+      ).resolves.toBeUndefined(); // Verifica que o retorno é `undefined`
     });
   });
 });

@@ -24,7 +24,9 @@ describe('PostController (e2e)', () => {
   describe('/post/:postId (GET)', () => {
     it('Deve retornar os dados de um post pelo ID', async () => {
       const postId = 1; // Supondo que o ID 1 exista
-      const response = await request(app.getHttpServer()).get(`/post/${postId}`);
+      const response = await request(app.getHttpServer()).get(
+        `/post/${postId}`,
+      );
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('id', postId);
@@ -43,7 +45,9 @@ describe('PostController (e2e)', () => {
 
   describe('/post (GET)', () => {
     it('Deve retornar uma lista paginada de posts', async () => {
-      const response = await request(app.getHttpServer()).get('/post?limit=10&page=1');
+      const response = await request(app.getHttpServer()).get(
+        '/post?limit=10&page=1',
+      );
 
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
@@ -56,7 +60,9 @@ describe('PostController (e2e)', () => {
     });
 
     it('Deve retornar status 400 para parâmetros inválidos', async () => {
-      const response = await request(app.getHttpServer()).get('/post?limit=invalid&page=1');
+      const response = await request(app.getHttpServer()).get(
+        '/post?limit=invalid&page=1',
+      );
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Validation failed');
@@ -71,7 +77,9 @@ describe('PostController (e2e)', () => {
         content: 'Conteúdo do novo post.',
       };
 
-      const response = await request(app.getHttpServer()).post('/post').send(newPost);
+      const response = await request(app.getHttpServer())
+        .post('/post')
+        .send(newPost);
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('id');
@@ -87,7 +95,9 @@ describe('PostController (e2e)', () => {
         content: 'Conteúdo sem título.',
       };
 
-      const response = await request(app.getHttpServer()).post('/post').send(invalidPost);
+      const response = await request(app.getHttpServer())
+        .post('/post')
+        .send(invalidPost);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Validation failed');
@@ -103,7 +113,9 @@ describe('PostController (e2e)', () => {
         content: 'Conteúdo do post atualizado.',
       };
 
-      const response = await request(app.getHttpServer()).put('/post').send(updatedPost);
+      const response = await request(app.getHttpServer())
+        .put('/post')
+        .send(updatedPost);
 
       expect(response.status).toBe(200);
       expect(response.body.title).toBe(updatedPost.title);
@@ -116,7 +128,9 @@ describe('PostController (e2e)', () => {
         title: '',
       };
 
-      const response = await request(app.getHttpServer()).put('/post').send(invalidUpdate);
+      const response = await request(app.getHttpServer())
+        .put('/post')
+        .send(invalidUpdate);
 
       expect(response.status).toBe(400);
       expect(response.body.message).toContain('Validation failed');
@@ -126,7 +140,9 @@ describe('PostController (e2e)', () => {
   describe('/post/:postId (DELETE)', () => {
     it('Deve excluir um post pelo ID e retornar status 204', async () => {
       const postId = 1; // Supondo que o ID 1 exista
-      const response = await request(app.getHttpServer()).delete(`/post/${postId}`);
+      const response = await request(app.getHttpServer()).delete(
+        `/post/${postId}`,
+      );
 
       expect(response.status).toBe(204);
     });
