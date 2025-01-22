@@ -23,7 +23,7 @@ import { JwtModule } from '@nestjs/jwt';
     }),
     JwtModule.register({
       global: true,
-      secret: 'fiap',
+      secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: '10m' },
     }),
     BlogModule,
