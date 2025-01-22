@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { BlogModule } from './blog/blog.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -19,6 +20,11 @@ import { ConfigModule } from '@nestjs/config';
       database: process.env.DATABASE,
       entities: [__dirname + '/**/entities/*.entity{.ts,.js}'],
       synchronize: process.env.NODE_ENV === 'development',
+    }),
+    JwtModule.register({
+      global: true,
+      secret: 'fiap',
+      signOptions: { expiresIn: '10m' },
     }),
     BlogModule,
   ],
