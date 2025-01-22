@@ -6,6 +6,7 @@ import {
 import { UserService } from './user.service';
 import { JwtService } from '@nestjs/jwt';
 import { PersonService } from './person.service';
+import { compare } from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
@@ -18,7 +19,10 @@ export class AuthService {
   //TODO inteface for signIn
   async signIn(username: string, password: string): Promise<any> {
     const user = await this.userService.getUserByUsername(username);
-    if (user?.password === password) {
+
+    const doestPasswordMatch = await compare(password, user.password);
+
+    if (doestPasswordMatch) {
       const person = await this.personService.getPerson(user.person.id);
       if (!person) throw new NotFoundException('Person not found');
 

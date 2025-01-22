@@ -6,12 +6,16 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { exctractTokenFromHeader } from '../utils/extract-token-from-header';
+import { UserService } from 'src/blog/services/user.service';
 
 @Injectable()
 export class AdminGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private userService: UserService,
+  ) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
     const token = exctractTokenFromHeader(request);
 
@@ -20,8 +24,12 @@ export class AdminGuard implements CanActivate {
     }
 
     const decoded = this.jwtService.decode(token);
-    if (decoded && decoded['admin']) {
-      return true;
+    if (decoded && decoded['sub']) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { person, ...rest } = await this.userService.getUser(
+        decoded['sub'],
+      );
+      return person.professor;
     }
 
     throw new ForbiddenException();

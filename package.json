@@ -18,6 +18,7 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+    "docker:up": "docker compose up -d",
     "docker:rebuild": "docker compose down && docker compose build --no-cache && docker compose up -d"
   },
   "dependencies": {
@@ -28,6 +29,8 @@
     "@nestjs/platform-express": "^10.4.15",
     "@nestjs/swagger": "^7.4.2",
     "@nestjs/typeorm": "^10.0.2",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
     "nestjs": "^0.0.1",
     "pg": "^8.13.1",
     "reflect-metadata": "^0.2.0",

@@ -18,6 +18,7 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { personSchema } from './person.controller';
 import { IUser } from '../entities/models/user.interface';
 import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { hash } from 'bcryptjs';
 
 const userSchema = z.object({
   id: z.coerce.number().optional(),
@@ -52,9 +53,12 @@ export class UserController {
   @UsePipes(new ZodValidationPipe(userSchema))
   @Post()
   async createUser(@Body() { username, password, person }: UserSchema) {
+    const saltRounds = 8;
+    const hashedPassword = await hash(password, saltRounds);
+
     return await this.userService.createUser({
       username,
-      password,
+      password: hashedPassword,
       person,
     } as IUser);
   }
@@ -65,10 +69,13 @@ export class UserController {
     @Body(new ZodValidationPipe(userSchema))
     { id, username, password, person }: UserSchema,
   ) {
+    const saltRounds = 8;
+    const hashedPassword = await hash(password, saltRounds);
+
     return await this.userService.updateUser({
       id,
       username,
-      password,
+      password: hashedPassword,
       person,
     } as IUser);
   }
