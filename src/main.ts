@@ -3,7 +3,7 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-async function bootstrap() {
+export async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalFilters(new HttpExceptionFilter());
   const config = new DocumentBuilder()
