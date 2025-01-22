@@ -8,19 +8,22 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
 import { ApiBearerAuth, ApiTags, ApiOperation, ApiParam, ApiResponse, ApiProperty } from '@nestjs/swagger';
-
+import { personSchema } from './person.controller';
+import { IUser } from '../entities/models/user.interface';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 
 const userSchema = z.object({
   id: z.coerce.number().optional(),
   username: z.string(),
   password: z.string(),
-  person: z.coerce.number().optional(),
+  person: personSchema.optional(),
 });
 
 type UserSchema = z.infer<typeof userSchema>;
@@ -57,6 +60,7 @@ class UserResponseDto {
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
+  @UseGuards(AuthGuard)
   @Get(':userId')
   @ApiOperation({
     summary: 'Obter usuário pelo ID',
@@ -88,6 +92,7 @@ export class UserController {
     return await this.userService.getUser(userId);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOperation({
     summary: 'Obter todos os usuários',
@@ -158,9 +163,14 @@ export class UserController {
   })
   @UsePipes(new ZodValidationPipe(userSchema))
   async createUser(@Body() { username, password, person }: UserSchema) {
-    return await this.userService.createUser({ username, password, person });
+    return await this.userService.createUser({
+      username,
+      password,
+      person,
+    } as IUser);
   }
 
+  @UseGuards(AuthGuard)
   @Put()
   @ApiOperation({
     summary: 'Atualizar usuário existente',
@@ -183,9 +193,15 @@ export class UserController {
   async updateUser(
     @Body() { id, username, password, person }: UserSchema,
   ) {
-    return await this.userService.updateUser({ id, username, password, person });
+    return await this.userService.updateUser({
+      id,
+      username,
+      password,
+      person,
+    } as IUser);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':userId')
   @ApiOperation({
     summary: 'Deletar usuário pelo ID',

@@ -8,6 +8,7 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { PostService } from '../services/post.service';
@@ -23,10 +24,13 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { personSchema } from './person.controller';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
+import { AdminGuard } from 'src/shared/guards/admin.guard';
 
 const postSchema = z.object({
   id: z.coerce.number().optional(),
-  author: z.coerce.number(),
+  author: personSchema.optional(),
   title: z.string(),
   content: z.string(),
 });
@@ -38,6 +42,7 @@ type PostSchema = z.infer<typeof postSchema>;
 export class PostController {
   constructor(private readonly postService: PostService) { }
 
+  @UseGuards(AuthGuard)
   @Get(':postId')
   @ApiOperation({
     summary: 'Buscar um post pelo seu ID',
@@ -67,6 +72,7 @@ export class PostController {
     return await this.postService.getPost(postId);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOperation({
     summary: 'Buscar uma lista de posts com paginação',
@@ -120,6 +126,7 @@ export class PostController {
 
   @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(postSchema))
+  @UseGuards(AuthGuard, AdminGuard)
   @Post()
   @ApiOperation({
     summary: 'Criar um novo post',
@@ -139,10 +146,14 @@ export class PostController {
     },
   })
   async createPost(@Body() { author, title, content }: PostSchema) {
-    const post: IPost = { author, title, content };
-    return await this.postService.createPost(post);
+    return await this.postService.createPost({
+      author,
+      title,
+      content,
+    } as IPost);
   }
 
+  @UseGuards(AuthGuard, AdminGuard)
   @Put()
   @ApiOperation({
     summary: 'Atualizar um post existente',
@@ -167,9 +178,15 @@ export class PostController {
   async updatePost(
     @Body(new ZodValidationPipe(postSchema)) { id, author, title, content }: PostSchema,
   ) {
-    return await this.postService.updatePost({ id, author, title, content });
+    return await this.postService.updatePost({
+      id,
+      author,
+      title,
+      content,
+    } as IPost);
   }
 
+  @UseGuards(AuthGuard, AdminGuard)
   @Delete(':postId')
   @ApiOperation({
     summary: 'Deletar um post pelo seu ID',

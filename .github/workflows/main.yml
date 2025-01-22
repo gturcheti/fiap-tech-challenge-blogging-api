@@ -4,22 +4,52 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
     runs-on: ubuntu-latest
-  
+
     env: 
       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+      PORT: ${{ secrets.PORT }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      DATABASE: ${{ secrets.DATABASE }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
+      DATABASE_PORT: ${{ secrets.DATABASE_PORT }}
 
     steps:
+      # Passo 1: Checkout do repositório
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      # Passo 2: Configurar Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'  # Versão do Node.js que está sendo usada
+
+      # Passo 3: Instalar dependências
+      - name: Install dependencies
+        run: npm install
+
+      # Passo 4: Rodar os testes com cobertura
+      - name: Run tests with coverage
+        run: npm run test:cov
+
+      # Passo 5: Enviar o relatório de cobertura para o Coveralls (opcional)
+      - name: Send coverage to Coveralls
+        run: npm run coveralls < coverage/lcov-report/lcov-report.json
+        env:
+          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}  # Adicione esse secret no GitHub
+
+      # Passo 6: Fazer login no Docker
       - name: Build and Push Docker Image
         run: |
           docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
           docker build -t $DOCKER_USERNAME/fiap-tech-challenge-blogging-api:latest --build-arg NODE_ENV=${{secrets.NODE_ENV}} --build-arg PORT=${{secrets.PORT}} --build-arg JWT_SECRET=${{ secrets.JWT_SECRET }} --build-arg DATABASE=${{ secrets.DATABASE }} --build-arg DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} --build-arg DATABASE_PORT=${{ secrets.DATABASE_PORT }} .
           docker push $DOCKER_USERNAME/fiap-tech-challenge-blogging-api:latest
-   

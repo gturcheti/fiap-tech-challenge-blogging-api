@@ -7,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Person } from './person.entity';
+import { IPerson } from './models/person.interface';
 
 @Entity({ name: 'user' })
 export class User implements IUser {
@@ -21,5 +22,5 @@ export class User implements IUser {
 
   @OneToOne(() => Person)
   @JoinColumn({ name: 'person_id' })
-  person?: number;
+  person?: IPerson;
 }

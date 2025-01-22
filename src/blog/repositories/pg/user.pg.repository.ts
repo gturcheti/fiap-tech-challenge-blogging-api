@@ -17,6 +17,13 @@ export class UserPGRepository implements UserRepository {
     });
   }
 
+  async findByUsername(username: string): Promise<IUser | undefined> {
+    return await this.userRepository.findOne({
+      where: { username },
+      relations: ['person'],
+    });
+  }
+
   async findAll(limit: number, page: number): Promise<IUser[]> {
     return await this.userRepository.find({
       take: limit,

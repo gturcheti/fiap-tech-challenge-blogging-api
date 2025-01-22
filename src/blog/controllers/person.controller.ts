@@ -9,11 +9,13 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { PersonService } from '../services/person.service';
 import { z } from 'zod';
 import { ZodValidationPipe } from 'src/shared/pipes/zod-validation.pipe';
+import { AuthGuard } from 'src/shared/guards/auth.guard';
 import {
   ApiBearerAuth,
   ApiBody,
@@ -24,7 +26,8 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
-const personSchema = z.object({
+
+export const personSchema = z.object({
   id: z.coerce.number().optional(),
   name: z.string(),
   surname: z.string(),
@@ -39,6 +42,7 @@ type PersonSchema = z.infer<typeof personSchema>;
 export class PersonController {
   constructor(private readonly personService: PersonService) { }
 
+  @UseGuards(AuthGuard)
   @Get(':personId')
   @ApiOperation({ summary: 'Retornar uma pessoa pelo ID' })
   @ApiParam({
@@ -71,7 +75,7 @@ export class PersonController {
     return person;
   }
 
-
+  @UseGuards(AuthGuard)
   @Get()
   @ApiOperation({ summary: 'Retornar uma lista paginada de pessoas' })
   @ApiQuery({
@@ -166,7 +170,7 @@ export class PersonController {
     return this.personService.createPerson({ name, surname, email, professor });
   }
 
-
+  @UseGuards(AuthGuard)
   @Put()
   @ApiOperation({ summary: 'Atualizar uma pessoa existente' })
   @ApiResponse({ status: 200, description: 'Pessoa atualizada com sucesso.' })
@@ -190,6 +194,7 @@ export class PersonController {
     return this.personService.updatePerson({ id, name, surname, email, professor });
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':personId')
   @ApiOperation({ summary: 'Deletar uma pessoa pelo ID' })
   @ApiParam({
