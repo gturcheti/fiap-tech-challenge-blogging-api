@@ -120,7 +120,7 @@ Para o melhor uso da API é recomendado o seguinte fluxo para cadastro das infor
 3 - Adição da postagem (POST /post)
 4 - Consultas nas rotas de GET para posts, pessoas e usuários. 
 
-Para conhecer mais funcionalidades, realização de testes, e mais detalhes sobre as rotas disponíveis, verifique o `SWAGGER` da aplicação na porta "PORTA"
+Para conhecer mais funcionalidades, realização de testes, e mais detalhes sobre as rotas disponíveis, verifique o `SWAGGER` da aplicação na rota "{{url}}/doc"
 
 ## 4 . Desafios da equipe
 
