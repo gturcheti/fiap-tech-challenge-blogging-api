@@ -1,9 +1,58 @@
 <p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
+  <img src="https://github.com/user-attachments/assets/f9b94ac9-1dce-4e06-8e79-6919fdaf2813" alt="Descrição da Imagem">
 </p>
+<br><br>
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/eadacb82-9bec-4897-9911-00bed69e41ae" alt="Descrição da Imagem">
+</p>
+<br><br>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+## MANUAL DE USO DA API
+
+### Configuração do .env:
+
+```bash
+NODE_ENV=
+PORT=
+DATABASE=
+DATABASE_PASSWORD=
+DATABASE_PORT=
+JWT_SECRET=
+```
+
+### Instalação do projeto
+
+```bash
+$ npm install
+```
+
+### Compilação e Start
+
+```bash
+# development
+$ npm run start
+```
+
+### Rodar testes
+
+```bash
+# unit tests
+$ npm run test
+
+# test coverage
+$ npm run test:cov
+```
+
+### Montagem do container
+
+```bash
+# criar imagem docker 
+$ npm run docker:up
+
+# recriar imagem docker
+$ npm run docker:rebuild
+```
+<br><br>
 
 # ARQUITETURA DA APLICAÇÃO
 ## 1 . Diagrama de componentes:
@@ -55,6 +104,8 @@ A aplicação foi desenvolvida visando a segregação de funcionalidades e regra
 - **Controladores**: lidam com as requisções http fazendo o roteamento e utilizam os serviços para retornar as respostas apropriadas;
 - **Filtros**: filtro global para trtamento de exceções HTTP;
 - **Pipes**: para validação de dados utilizando a biblioteca Zod.
+- **Guards**: controla o acesso de usuários autenticados e validações de permissão de administrador (docente).
+- **Utils**: funções comuns reutilizaveis. 
 
 ### Devops
 - **Docker**: elaboração do *Dockerfile*, script para construção da imagem e configuração de ambiente, e do *Docker-Compose* para definição dos serviços da api e banco de dados a serem executados em contêineres.
@@ -64,10 +115,10 @@ A aplicação foi desenvolvida visando a segregação de funcionalidades e regra
 
 Para o melhor uso da API é recomendado o seguinte fluxo para cadastro das informações:
 
-1 - Cadastro do usuário (POST /user)
-2 - Cadastro da pessoa (POST /person)
-3 - Vínculo da pessoa ao usuário (PUT /user/:id)
-4 - Adição da postagem (POST /post)
+1 - Cadastro da pessoa (POST /person)
+2 - Cadastro do usuário (POST /user)
+3 - Adição da postagem (POST /post)
+4 - Consultas nas rotas de GET para posts, pessoas e usuários. 
 
 Para conhecer mais funcionalidades, realização de testes, e mais detalhes sobre as rotas disponíveis, verifique o `SWAGGER` da aplicação na porta "PORTA"
 
@@ -82,74 +133,3 @@ Para conhecer mais funcionalidades, realização de testes, e mais detalhes sobr
 - Aprendizado de boas práticas e arquitetura do NestJS, como a organização modular do código, o uso de repositories e TypeOrm;
 - Conhecimento adquirido em padrões de arquiteturas como Factories e princípios SOLID com maior prática a respeito de inversão de dependência e responsabilidade única.
 - O uso de tecnologias para CI/CD por meio do GitHub Actions e Docker;
-
-
-# MANUAL DE USO DA API
-
-
-
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
