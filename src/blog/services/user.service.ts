@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { IUser } from '../entities/models/user.interface';
 import { UserRepository } from '../repositories/user.repository';
 import { PersonRepository } from '../repositories/person.repository';
@@ -13,7 +17,9 @@ export class UserService {
   async getUser(id: number) {
     const user = await this.userRepository.findById(id);
     if (!user) throw new NotFoundException(`User not found`);
-    return user;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = user;
+    return result;
   }
 
   async getUserByUsername(username: string) {
@@ -23,21 +29,33 @@ export class UserService {
   }
 
   async getAllUser(limit: number, page: number) {
-    return await this.userRepository.findAll(limit, page);
+    const userList = await this.userRepository.findAll(limit, page);
+    return userList.map((user) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { password, ...result } = user;
+      return result;
+    });
   }
 
   async createUser(user: IUser) {
-    if (user.person) {
+    if (user.person.id) {
       const person = await this.personRepository.findById(user.person.id);
       if (!person) throw new NotFoundException(`Person not found`);
+    } else {
+      throw new BadRequestException();
     }
-    return await this.userRepository.createUser(user);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = await this.userRepository.createUser(user);
+    return result;
   }
 
   async updateUser(user: IUser) {
     const person = await this.personRepository.findById(user.person.id);
     if (!person) throw new NotFoundException(`Person not found`);
-    return await this.userRepository.updateUser(user);
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { password, ...result } = await this.userRepository.updateUser(user);
+    return result;
   }
 
   async deleteUser(userId: number) {

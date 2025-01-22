@@ -36,4 +36,16 @@ export class PostPGRepository implements PostRepository {
   async deletePost(post: IPost): Promise<void> {
     await this.postRepository.remove(post);
   }
+
+  async findAllByKey(
+    limit: number,
+    page: number,
+    key: string,
+  ): Promise<IPost[]> {
+    return await this.postRepository.find({
+      take: limit,
+      skip: limit * (page - 1),
+      where: [{ title: key }, { content: key }],
+    });
+  }
 }

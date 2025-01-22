@@ -1,4 +1,8 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PostRepository } from '../repositories/post.repository';
 import { IPost } from '../entities/models/post.interface';
 import { PersonRepository } from '../repositories/person.repository';
@@ -18,6 +22,11 @@ export class PostService {
 
   async getAllPost(limit: number, page: number) {
     return await this.postRepository.findAll(limit, page);
+  }
+
+  async getAllPostByKey(limit: number, page: number, key?: string) {
+    if (!key) throw new BadRequestException();
+    return await this.postRepository.findAllByKey(limit, page, key);
   }
 
   async createPost(post: IPost) {

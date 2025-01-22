@@ -124,6 +124,16 @@ export class PostController {
     return await this.postService.getAllPost(limit, page);
   }
 
+  @UseGuards(AuthGuard)
+  @Get('search')
+  async getAllPostByKey(
+    @Query('limit', ParseIntPipe) limit: number,
+    @Query('page', ParseIntPipe) page: number,
+    @Query('key') key?: string,
+  ) {
+    return await this.postService.getAllPostByKey(limit, page, key);
+  }
+
   @ApiBearerAuth()
   @UsePipes(new ZodValidationPipe(postSchema))
   @UseGuards(AuthGuard, AdminGuard)
