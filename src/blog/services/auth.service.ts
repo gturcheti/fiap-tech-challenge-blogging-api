@@ -16,7 +16,6 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  //TODO inteface for signIn
   async signIn(username: string, password: string): Promise<any> {
     const user = await this.userService.getUserByUsername(username);
 
