@@ -43,6 +43,7 @@ export class PersonController {
 
   @UseGuards(AuthGuard)
   @Get(':personId')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Retornar uma pessoa pelo ID' })
   @ApiParam({
     name: 'personId',
@@ -66,6 +67,7 @@ export class PersonController {
   })
   @ApiResponse({ status: 404, description: 'Pessoa não encontrada.' })
   @ApiResponse({ status: 400, description: 'Parâmetro fornecido é inválido' })
+  @ApiResponse({ status: 401, description: 'Token inválido ou ausente' })
   async getPerson(@Param('personId', ParseIntPipe) personId: number) {
     const person = await this.personService.getPerson(personId);
     if (!person) {
