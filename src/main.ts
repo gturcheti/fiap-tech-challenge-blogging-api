@@ -3,9 +3,11 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './shared/filters/http-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
-export async function bootstrap() {
+async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
   app.useGlobalFilters(new HttpExceptionFilter());
+
   const config = new DocumentBuilder()
     .setTitle('Tech Challenge Blog API - DOC')
     .setDescription(
@@ -20,6 +22,11 @@ export async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('doc', app, document);
+
+  app.enableCors({
+    origin: 'http://localhost:5173',
+    credentials: true,
+  });
 
   await app.listen(process.env.PORT || 3000);
 }
