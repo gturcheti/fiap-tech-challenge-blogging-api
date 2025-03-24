@@ -130,6 +130,58 @@ export class PostController {
 
   @UseGuards(AuthGuard)
   @Get('search')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Buscar posts por chave',
+    description: 'Esse endpoint busca posts que correspondem à chave fornecida com paginação.',
+  })
+  @ApiQuery({
+    name: 'limit',
+    type: Number,
+    required: true,
+    description: 'Número máximo de posts a serem retornados por página.',
+    example: 10,
+  })
+  @ApiQuery({
+    name: 'page',
+    type: Number,
+    required: true,
+    description: 'Número da página para a paginação.',
+    example: 1,
+  })
+  @ApiQuery({
+    name: 'key',
+    type: String,
+    required: false,
+    description: 'Chave para filtrar os posts (opcional).',
+    example: 'nestjs',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de posts retornada com sucesso.',
+    schema: {
+      type: 'object',
+      properties: {
+        total: { type: 'number', example: 100 },
+        limit: { type: 'number', example: 10 },
+        page: { type: 'number', example: 1 },
+        data: {
+          type: 'array',
+          items: {
+            type: 'object',
+            properties: {
+              id: { type: 'number', example: 1 },
+              author: { type: 'number', example: 1 },
+              title: { type: 'string', example: 'Título do Post' },
+              content: { type: 'string', example: 'Conteúdo do post aqui.' },
+            },
+          },
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Parâmetros de consulta inválidos.' })
+  @ApiResponse({ status: 401, description: 'Token de autenticação inválido ou ausente.' })
   async getAllPostByKey(
     @Query('limit', ParseIntPipe) limit: number,
     @Query('page', ParseIntPipe) page: number,
